@@ -36,7 +36,6 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var passport = require('passport');
 var util = require('util');
-var bunyan = require('bunyan');
 var config = require('./config');
 
 
@@ -45,9 +44,6 @@ var config = require('./config');
 
 var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 
-var log = bunyan.createLogger({
-    name: 'box-b2c-sandpit'
-});
 
 /******************************************************************************
  * Set up passport in the app 
@@ -64,7 +60,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(oid, done) {
-  log.info("calling from deser");
+  console.log("calling from deser");
 
   findByOid(oid, function (err, user) {
     done(err, user);
@@ -77,7 +73,7 @@ var users = [];
 var findByOid = function(oid, fn) {
   for (var i = 0, len = users.length; i < len; i++) {
     var user = users[i];
-   log.info('we are using user: ', user.sub);
+    console.log('we are using user: '+ user.sub);
     if (user.oid === oid) {
       return fn(null, user);
     }
@@ -128,7 +124,7 @@ passport.use(new OIDCStrategy({
     }
     // asynchronous verification, for effect...
     process.nextTick(function () {
-      log.info("calling from passport");
+      console.log("calling from passport");
       findByOid(profile.oid, function(err, user) {
         if (err) {
           return done(err);
@@ -209,8 +205,8 @@ app.get('/login',
     )(req, res, next);
   },
   function(req, res) {
-    log.info("REQ:" + req);
-    log.info('Login was called in the Sample');
+    console.log("REQ:" + req);
+    console.log('Login was called in the Sample');
     res.redirect('/');
 });
 app.post('/boxUI', urlencodedParser, function (req, res) {
@@ -245,7 +241,7 @@ app.get('/auth/openid/return',
     )(req, res, next);
   },
   function(req, res) {
-    log.info('We received a return from AzureAD. - create here1?' + JSON.stringify(req.body));
+    console.log('We received a return from AzureAD. - create here1?' + JSON.stringify(req.body));
     res.redirect('/');
   });
 
@@ -263,10 +259,10 @@ app.post('/auth/openid/return',
     )(req, res, next);
   },
   function(req, res) {
-    log.info('We received a return from AzureAD. - create here2?' + JSON.stringify(req.body));
+    console.log('We received a return from AzureAD. - create here2?' + JSON.stringify(req.body));
     var decoded = jwtDecode( req.body.id_token);
-    log.info("DEC:" + JSON.stringify(decoded));
-    log.info("OID:" + decoded.oid + "::" + decoded.name);
+    console.log("DEC:" + JSON.stringify(decoded));
+    console.log("OID:" + decoded.oid + "::" + decoded.name);
     getAppUserID(decoded.oid).then((appuserId) => {
       if(appuserId=='NOTFOUND') {
         createAppUser(decoded.oid,decoded.name).then((appUserID) => {
@@ -293,16 +289,16 @@ app.get('/fail', function(req, res){
   });
 app.listen(3000);
 const createAppUser = (azId,name) =>   {
-  log.info(azId + ":" + name);
+  console.log(azId + ":" + name);
   return serviceAccountClient.enterprise.addAppUser(name, { "is_platform_access_only": true,"external_app_user_id":azId }).then((result) => {
-    log.info(result);
+    console.log(result);
       
         return result.id;
       }
     );
 }
 const getAppUserID = (azId) => {
-  log.info("Finding extID:" + azId);
+  console.log("Finding extID:" + azId);
   return serviceAccountClient.enterprise.getUsers({ "external_app_user_id": azId })
       .then((result) => {
           console.log(result);
