@@ -287,7 +287,8 @@ app.get('/logout', function(req, res){
 app.get('/fail', function(req, res){
   res.json({"fail":"here"});
   });
-app.listen(3000);
+  var port = process.env.PORT || 3000;
+app.listen(port);
 const createAppUser = (azId,name) =>   {
   console.log(azId + ":" + name);
   return serviceAccountClient.enterprise.addAppUser(name, { "is_platform_access_only": true,"external_app_user_id":azId }).then((result) => {
