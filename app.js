@@ -214,7 +214,7 @@ app.get('/login',
 });
 app.post('/boxUI', urlencodedParser, function (req, res) {
   console.log("tok:" + req.body.userId);
-  console.log("tok:" + req.body);
+  console.log("tok:" + JSON.stringify(req.body));
   let azId= req.body.userId;
 	getAppUserID(azId)
 		.then((appUserID) => {
