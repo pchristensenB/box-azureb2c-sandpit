@@ -238,7 +238,10 @@
 				accessToken = json.accessToken;
 				showBoxUI(accessToken);
 				$("#user").append("AzureB2C User:" + json.userName).append("<br/>");
-				$("#user").append("AzureB2C Email:" + json.email).append("<br/>");
+				<% if (user) { %>
+					$("#user").append("AzureB2C Email:<%=user.emails[0]%>").append("<br/>");
+					<%}%>
+
 				$("#user").append("AzureB2C ID:" + json.azId).append("<br/>");
 				$("#user").append("Box User ID:" + json.boxId).append("<br/>");
 				$("#user").append("Box external app user ID:" + json.extId).append("<br/>");
