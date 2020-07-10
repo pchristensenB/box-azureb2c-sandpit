@@ -181,12 +181,12 @@
 		</div>
 	</div>
 	<script>
-		function showBoxUI(boxAccessToken) {
-			console.log("tok:" + boxAccessToken.accessToken)
+		function showBoxUI(accessToken) {
+			console.log("tok:" + accessToken)
 			$(".view").hide();
 			var folderId = '0';
 			var contentExplorer = new Box.ContentExplorer();
-			contentExplorer.show(folderId, boxAccessToken.accessToken, {
+			contentExplorer.show(folderId, accessToken, {
 				container: '#app-container',
 				logoUrl: 'box'
 			})
@@ -233,6 +233,7 @@
 		function getBoxToken(userId) {
 			console.log(userId);
 			$.post("/boxUI", { userId: userId }, function (json) {
+				console.log(json);
 				console.log("msg: " + JSON.stringify(json.accessToken));
 				accessToken = json.accessToken;
 				showBoxUI(accessToken);
