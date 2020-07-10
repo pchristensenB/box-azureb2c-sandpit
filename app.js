@@ -192,7 +192,10 @@ app.get('/', function(req, res) {
   res.render('index', { user: req.user });
 });
 
-
+app.post('/', function(req, res) {
+  console.log
+  res.render('index', { user: req.user });
+});
 app.get('/login',
   function(req, res, next) {
     passport.authenticate('azuread-openidconnect', 
@@ -211,6 +214,7 @@ app.get('/login',
 });
 app.post('/boxUI', urlencodedParser, function (req, res) {
   console.log("tok:" + req.body.userId);
+  console.log("tok:" + req.body);
   let azId= req.body.userId;
 	getAppUserID(azId)
 		.then((appUserID) => {
@@ -219,10 +223,17 @@ app.post('/boxUI', urlencodedParser, function (req, res) {
 				res.json({error: "some error"});
 			}
 			else {
-				console.log(`App User ID is: ${appUserID}`);
-				session.getAppUserTokens(appUserID).then(function(accessToken) {
+				console.log(`App User ID is: ${appUserID.id}`);
+				session.getAppUserTokens(appUserID.id).then(function(accessToken) {
 					console.log("the access token is: " + accessToken);
-					res.json({accessToken: accessToken});
+					res.json({
+            accessToken: accessToken.accessToken,
+						azId:azId,
+						userName:appUserID.name,
+						login:appUserID.login,
+						extId:appUserID.extId,
+						boxId:appUserID.id
+          });
 				})
 			}
 		});
@@ -241,7 +252,7 @@ app.get('/auth/openid/return',
     )(req, res, next);
   },
   function(req, res) {
-    console.log('We received a return from AzureAD. - create here1?' + JSON.stringify(req.body));
+    console.log('We received a return from AzureAD.' + JSON.stringify(req.body));
     res.redirect('/');
   });
 
@@ -259,7 +270,7 @@ app.post('/auth/openid/return',
     )(req, res, next);
   },
   function(req, res) {
-    console.log('We received a return from AzureAD. - create here2?' + JSON.stringify(req.body));
+    console.log('We received a return from AzureAD. - create here!' + JSON.stringify(req.body));
     var decoded = jwtDecode( req.body.id_token);
     console.log("DEC:" + JSON.stringify(decoded));
     console.log("OID:" + decoded.oid + "::" + decoded.name);
@@ -300,11 +311,11 @@ const createAppUser = (azId,name) =>   {
 }
 const getAppUserID = (azId) => {
   console.log("Finding extID:" + azId);
-  return serviceAccountClient.enterprise.getUsers({ "external_app_user_id": azId })
+  return serviceAccountClient.enterprise.getUsers({ "external_app_user_id": azId,"fields":"id,name,login,external_app_user_id" })
       .then((result) => {
           console.log(result);
           if (result.total_count > 0) {
-              return result.entries[0].id;
+            return {id:result.entries[0].id,name:result.entries[0].name,login:result.entries[0].login,extId:result.entries[0].external_app_user_id};
           }
           else {
             return "NOTFOUND";

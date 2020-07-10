@@ -83,7 +83,9 @@
 				  <div class="col-md-6">
 					  <div class="d-flex flex-column  h-100">
 						  <h3 class="heading display-4">Welcome to the Azure B2C and Box Platform Demo</h3>
-						  <p class="subheading" id="mainMsg1">Shows Azure B2C integration with Box platform and app users.
+						  <p class="subheading" id="mainMsg1">Shows Azure B2C integration with Box platform and app users. In this demo we use
+								lazy app user creation, so after the user has been authorized by AzureB2C we check if the user exists, and create if not. The 
+								mapping is done from Azure User ID to Box 'external_app_user_id'
 						  </p>
 						  <h4 class="subheading" id="mainMsg"></h4>
 						  <div>
