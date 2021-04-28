@@ -17,9 +17,6 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 	<!-- Bootstrap core CSS -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-	<!-- Material Design Bootstrap -->
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet">
-
 	<link rel="stylesheet" href="https://cdn01.boxcdn.net/platform/elements/11.0.0/en-US/explorer.css" />
 	<style>
 		#app-container,
@@ -27,8 +24,6 @@
 		#loadingDiv {
 			display: none;
 		}
-	</style>
-	<style>
 		/* Style the button that is used to open and close the collapsible content */
 
 		.collapsible {
@@ -59,28 +54,98 @@
 			padding: 0 18px;
 			display: none;
 		}
+		.waves-light {
+			color: white !important;
+		}
 	</style>
 
 	<!-- Bootstrap tooltips -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
 	<!-- Bootstrap core JavaScript -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<!-- MDB core JavaScript -->
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
 	<!-- BOX JS-->
 
 	<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=es6,Intl"></script>
 
 	<script src="https://cdn01.boxcdn.net/platform/elements/11.0.0/en-US/explorer.js"></script>
-
+	<script>
+			function showBoxUI(accessToken) {
+				console.log("tok:" + accessToken)
+				$(".view").hide();
+				var folderId = '0';
+				var contentExplorer = new Box.ContentExplorer();
+				contentExplorer.show(folderId, accessToken, {
+					container: '#app-container',
+					logoUrl: 'box'
+				})
+				$("#app-container").height(600);
+				var coll = document.getElementsByClassName("collapsible");
+				var i;
+	
+				for (i = 0; i < coll.length; i++) {
+					coll[i].addEventListener("click", function () {
+						this.classList.toggle("active");
+						var content = this.nextElementSibling;
+						if (content.style.display === "block") {
+							content.style.display = "none";
+							$("#userinfo").text("Show user info");
+						} else {
+							content.style.display = "block";
+							$("#userinfo").text("Hide user info");
+						}
+					});
+				}
+	
+	
+				$("#app-container").show();
+				$("#myModal").toggle();
+			}
+			// Operations when the web page is loaded.
+			function onLoad() {
+				$("#imagemodal").toggle();
+	
+				$("#popreg").on("click", function () {
+					$('#imagepreview').attr('src', '/img/register.png');
+					$('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+				});
+				$("#poplog").on("click", function () {
+					$('#imagepreview').attr('src', '/img/login.png');
+					$('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+				});
+		<% if (user) { %>
+					getBoxToken('<%=user.sub%>');
+		<%}%>
+	
+		}
+	
+			function getBoxToken(userId) {
+				console.log(userId);
+				$.post("/boxUI", { userId: userId }, function (json) {
+					console.log(json);
+					console.log("msg: " + JSON.stringify(json.accessToken));
+					accessToken = json.accessToken;
+					showBoxUI(accessToken);
+					$("#user").append("AzureB2C User:" + json.userName).append("<br/>");
+					<% if (user) { %>
+						$("#user").append("AzureB2C Email:<%=user.emails[0]%>").append("<br/>");
+						<%}%>
+	
+					$("#user").append("AzureB2C ID:" + json.azId).append("<br/>");
+					$("#user").append("Box User ID:" + json.boxId).append("<br/>");
+					$("#user").append("Box external app user ID:" + json.extId).append("<br/>");
+					$("#user").append("Box User Name:" + json.userName).append("<br/>");
+					$("#user").append("Box User Login:" + json.login).append("<br/>");
+	
+				})
+			};
+		</script>
 </head>
 
 <body onload="onLoad()">
 	<div class="navbar-wrapper">
 		<div class="container">
-
-			<nav class="navbar navbar-expand-lg sticky-top navbar-dark  blue-gradient">
-				<div class="container">
+				<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+						<div class="container">
 
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="navbar-nav mr-auto">
@@ -118,7 +183,7 @@
 			<div class="row">
 				<div class="col-md-6">
 					<div class="d-flex flex-column  h-100">
-						<h3 class="heading display-4">Welcome to the Azure B2C and Box Platform Demo</h3>
+						<h3 class="heading display-5">Azure B2C and Box Platform Demo</h3>
 						<p class="subheading" id="mainMsg1">Shows Azure B2C integration with Box platform and app users. In this demo we use lazy app user creation, so after the
 							user has been authorized by AzureB2C we check if the user exists, and create if not. The mapping is done from Azure
 							User ID to Box 'external_app_user_id'
@@ -137,9 +202,6 @@
 
 
 									<% } %>
-
-
-
 						</div>
 					</div>
 
@@ -157,11 +219,8 @@
 						<div class="mask flex-center gradient">
 						</div>
 					</div>
-
 				</div>
-
 			</div>
-
 		</section>
 	</div>
 	<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -180,77 +239,7 @@
 			</div>
 		</div>
 	</div>
-	<script>
-		function showBoxUI(accessToken) {
-			console.log("tok:" + accessToken)
-			$(".view").hide();
-			var folderId = '0';
-			var contentExplorer = new Box.ContentExplorer();
-			contentExplorer.show(folderId, accessToken, {
-				container: '#app-container',
-				logoUrl: 'box'
-			})
-			$("#app-container").height(600);
-			var coll = document.getElementsByClassName("collapsible");
-			var i;
 
-			for (i = 0; i < coll.length; i++) {
-				coll[i].addEventListener("click", function () {
-					this.classList.toggle("active");
-					var content = this.nextElementSibling;
-					if (content.style.display === "block") {
-						content.style.display = "none";
-						$("#userinfo").text("Show user info");
-					} else {
-						content.style.display = "block";
-						$("#userinfo").text("Hide user info");
-					}
-				});
-			}
-
-
-			$("#app-container").show();
-			$("#myModal").toggle();
-		}
-		// Operations when the web page is loaded.
-		function onLoad() {
-			$("#imagemodal").toggle();
-
-			$("#popreg").on("click", function () {
-				$('#imagepreview').attr('src', '/img/register.png');
-				$('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
-			});
-			$("#poplog").on("click", function () {
-				$('#imagepreview').attr('src', '/img/login.png');
-				$('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
-			});
-    <% if (user) { %>
-				getBoxToken('<%=user.sub%>');
-    <%}%>
-
-	}
-
-		function getBoxToken(userId) {
-			console.log(userId);
-			$.post("/boxUI", { userId: userId }, function (json) {
-				console.log(json);
-				console.log("msg: " + JSON.stringify(json.accessToken));
-				accessToken = json.accessToken;
-				showBoxUI(accessToken);
-				$("#user").append("AzureB2C User:" + json.userName).append("<br/>");
-				<% if (user) { %>
-					$("#user").append("AzureB2C Email:<%=user.emails[0]%>").append("<br/>");
-					<%}%>
-
-				$("#user").append("AzureB2C ID:" + json.azId).append("<br/>");
-				$("#user").append("Box User ID:" + json.boxId).append("<br/>");
-				$("#user").append("Box external app user ID:" + json.extId).append("<br/>");
-				$("#user").append("Box User Name:" + json.userName).append("<br/>");
-				$("#user").append("Box User Login:" + json.login).append("<br/>");
-
-			})
-		};
-	</script>
 </body>
 
 </html>
