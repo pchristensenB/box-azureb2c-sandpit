@@ -6,146 +6,34 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!-- JQuery -->
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
 	<title>Box Platform + Azure B2C</title>
 
 	<!-- CSS -->
+	<!-- JQuery -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 	<!-- Bootstrap core CSS -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn01.boxcdn.net/platform/elements/11.0.0/en-US/explorer.css" />
-	<style>
-		#app-container,
-		#signoutDiv,
-		#loadingDiv {
-			display: none;
-		}
-		/* Style the button that is used to open and close the collapsible content */
-
-		.collapsible {
-			background-color: #eee;
-			color: #444;
-			cursor: pointer;
-			float: right;
-			margin-right: 20px;
-			border: none;
-			text-align: left;
-			outline: none;
-			font-size: 12px;
-		}
-
-		/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-
-		.collapsible:hover {
-			background-color: #ccc;
-		}
-
-		/* Style the collapsible content. Note: hidden by default */
-
-		.content {
-			float: right;
-			margin-right: 20px;
-			color: #ccb7ca;
-			font-size: 10pt;
-			padding: 0 18px;
-			display: none;
-		}
-		.waves-light {
-			color: white !important;
-		}
-	</style>
-
-	<!-- Bootstrap tooltips -->
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+	<link rel="stylesheet" href="https://cdn01.boxcdn.net/platform/elements/13.0.0/en-US/explorer.css" />
+	<link href="https://pcboxdemo.github.io/css/auth.css" type="text/css" rel="stylesheet" />
 	<!-- Bootstrap core JavaScript -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<!-- BOX JS-->
 
 	<script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=es6,Intl"></script>
 
-	<script src="https://cdn01.boxcdn.net/platform/elements/11.0.0/en-US/explorer.js"></script>
-	<script>
-			function showBoxUI(accessToken) {
-				console.log("tok:" + accessToken)
-				$(".view").hide();
-				var folderId = '0';
-				var contentExplorer = new Box.ContentExplorer();
-				contentExplorer.show(folderId, accessToken, {
-					container: '#app-container',
-					logoUrl: 'box'
-				})
-				$("#app-container").height(600);
-				var coll = document.getElementsByClassName("collapsible");
-				var i;
-	
-				for (i = 0; i < coll.length; i++) {
-					coll[i].addEventListener("click", function () {
-						this.classList.toggle("active");
-						var content = this.nextElementSibling;
-						if (content.style.display === "block") {
-							content.style.display = "none";
-							$("#userinfo").text("Show user info");
-						} else {
-							content.style.display = "block";
-							$("#userinfo").text("Hide user info");
-						}
-					});
-				}
-	
-	
-				$("#app-container").show();
-				$("#myModal").toggle();
-			}
-			// Operations when the web page is loaded.
-			function onLoad() {
-				$("#imagemodal").toggle();
-	
-				$("#popreg").on("click", function () {
-					$('#imagepreview').attr('src', '/img/register.png');
-					$('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
-				});
-				$("#poplog").on("click", function () {
-					$('#imagepreview').attr('src', '/img/login.png');
-					$('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
-				});
-		<% if (user) { %>
-					getBoxToken('<%=user.sub%>');
-		<%}%>
-	
-		}
-	
-			function getBoxToken(userId) {
-				console.log(userId);
-				$.post("/boxUI", { userId: userId }, function (json) {
-					console.log(json);
-					console.log("msg: " + JSON.stringify(json.accessToken));
-					accessToken = json.accessToken;
-					showBoxUI(accessToken);
-					$("#user").append("AzureB2C User:" + json.userName).append("<br/>");
-					<% if (user) { %>
-						$("#user").append("AzureB2C Email:<%=user.emails[0]%>").append("<br/>");
-						<%}%>
-	
-					$("#user").append("AzureB2C ID:" + json.azId).append("<br/>");
-					$("#user").append("Box User ID:" + json.boxId).append("<br/>");
-					$("#user").append("Box external app user ID:" + json.extId).append("<br/>");
-					$("#user").append("Box User Name:" + json.userName).append("<br/>");
-					$("#user").append("Box User Login:" + json.login).append("<br/>");
-	
-				})
-			};
-		</script>
+	<script src="https://cdn01.boxcdn.net/platform/elements/13.0.0/en-US/explorer.js"></script>
+	<script src="azureb2c.js"></script>
 </head>
 
-<body onload="onLoad()">
+<body>
 	<div class="navbar-wrapper">
 		<div class="container">
-				<nav class="navbar navbar-expand-lg navbar-light bg-primary">
-						<div class="container">
+			<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+				<div class="container">
 
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="navbar-nav mr-auto">
@@ -162,7 +50,7 @@
 								</li>
 								<% } else { %>
 									<li class="nav-item" id="loginLink">
-										<a class="nav-link waves-effect waves-light" id="signInButton" href="/logout" title="LOgout">Logout</a>
+										<a class="nav-link waves-effect waves-light" id="signInButton" href="/logout" title="Logout">Logout</a>
 									</li>
 									<% } %>
 
@@ -170,7 +58,7 @@
 					</div>
 				</div>
 			</nav>
-			<button type="button" class="collapsible" id="userinfo">Open User Info</button>
+			<button type="button" class="collapsible" id="userinfo" style="display:none">Open User Info</button>
 			<div id="user" class="content"></div>
 		</div>
 	</div>
@@ -179,6 +67,7 @@
 		<div id="boxUI">
 			<div id="app-container" style="width:80%;"></div>
 		</div>
+		<section class="load" style="margin:auto;width:50%;"></section>
 		<section class="view">
 			<div class="row">
 				<div class="col-md-6">

@@ -1,0 +1,72 @@
+
+// Operations when the web page is loaded.
+$(document).ready(function () {
+    $("#imagemodal").toggle();
+
+    $("#popreg").on("click", function () {
+        $('#imagepreview').attr('src', '/img/register.png');
+        $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+    });
+    $("#poplog").on("click", function () {
+        $('#imagepreview').attr('src', '/img/login.png');
+        $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+    });
+		<% if (user) { %>
+        $(".view").hide();
+        $(".load").html("<img src='https://pcboxdemo.github.io/load.gif'/>").show();
+        getBoxToken('<%=user.sub%>');
+		<%}%>
+	
+		});
+function showBoxUI(accessToken) {
+    console.log("tok:" + accessToken)
+    $(".view").hide();
+    var folderId = '0';
+    var contentExplorer = new Box.ContentExplorer();
+    contentExplorer.show(folderId, accessToken, {
+        container: '#app-container',
+        logoUrl: 'box'
+    })
+    $("#app-container").height(600);
+    $(".collapsible").show();
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                $("#userinfo").text("Show user info");
+            } else {
+                content.style.display = "block";
+                $("#userinfo").text("Hide user info");
+            }
+        });
+    }
+    $("#app-container").show();
+    $("#myModal").toggle();
+    $(".load").hide();
+}
+
+function getBoxToken(userId) {
+    console.log(userId);
+    $.post("/boxUI", { userId: userId }, function (json) {
+        console.log(json);
+        console.log("msg: " + JSON.stringify(json.accessToken));
+        accessToken = json.accessToken;
+        showBoxUI(accessToken);
+        $("#user").append("AzureB2C User:" + json.userName).append("<br/>");
+					<% if (user) { %>
+            $("#user").append("AzureB2C Email:<%=user.emails[0]%>").append("<br/>");
+						<%}%>
+
+            $("#user").append("AzureB2C ID:" + json.azId).append("<br/>");
+        $("#user").append("Box User ID:" + json.boxId).append("<br/>");
+        $("#user").append("Box external app user ID:" + json.extId).append("<br/>");
+        $("#user").append("Box User Name:" + json.userName).append("<br/>");
+        $("#user").append("Box User Login:" + json.login).append("<br/>");
+
+    })
+};

@@ -186,6 +186,10 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 };
+app.get('/azureb2c.js', function(req, res) {
+  console.log
+  res.render('azureb2c', { user: req.user });
+});
 
 app.get('/', function(req, res) {
   console.log
@@ -208,8 +212,6 @@ app.get('/login',
     )(req, res, next);
   },
   function(req, res) {
-    console.log("REQ:" + req);
-    console.log('Login was called in the Sample');
     res.redirect('/');
 });
 app.post('/boxUI', urlencodedParser, function (req, res) {
