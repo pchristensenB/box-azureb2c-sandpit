@@ -1,27 +1,14 @@
 
-'use strict';
+require('dotenv').config()
+
 const box = require('box-node-sdk');
 const jwtDecode = require('jwt-decode');
 var fs = require('fs');
 
-const boxAppSettings ={
-  "boxAppSettings": {
-    "clientID": "17gd8glbw7wm6xmdu593kvzmjl9m423p",
-    "clientSecret": "teCx22C5oYlft2zPRBFuUNT7xbfFsFGR",
-    "appAuth": {
-      "publicKeyID": "jnaq3wvq",
-      "privateKey": "-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIFDjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQILhoQXMRFWnACAggA\nMBQGCCqGSIb3DQMHBAjahXqI16kFJASCBMidUb3uuo+39SjaAWixp+lSjT860R8d\nByzJ+0swgOmrJIz7WnCX7cTI16iSLCQR8dp/TBQuW7ys4Bv+V0EfadNzofzmvgTE\n58UT7xOSKzVbO7PNGxBHby7ZuU3Gjld1h4kIu7ZKirw82pFOU/iRVIEQ8o39BRdN\nUj6ebuZM28MpEXxJ9BBB1w7sTATDaMJJi5i6O061CyRvwQ5washdXGLRtVUHsTjP\nnG2W3HfjIipmQjYPwO0Ow9lvePv+XVinQF7qjTrb62RBdtGLvaSfTJF9BBxOtO8H\nWRaxcLxKcFjg0T4S6fWMSLoWXMJjChMxuZGnShYVAjlxMMSTanWFRZWqgwJnN9bv\nA7KrW4AP9G0r0Hl8Uf2+LjKL5XinQTS/wHN3PXU+JIBmbXIcjmifcYzbE8z+x+G0\noVnNEoMJJjwW/zDZhTAexSWfJlnh7XxBzkBRRqcUBc2DT4RddS1OcWAB3dkzSOx2\ntDztQBcCcpGBbrTAPxX/ROeCwTKCuI5YKrqPHyXS9S/8v1UzqTYqXoKJdMG3lcoo\nCUccPo+K7OoGpcUOnMxlonRu43kqV3qMbMw9MQbNS22ofgQ7C5ALdkKMAdVrS5JO\n7Tt7eigZ8GZ759uOHW9xF/RAUkf0CoLC/pLiXrUJ/WLrRCowp/01ZATdU3R1yWd8\nWXq7itEWafyCIUhl4qQSzOz8pusfX9SxtJxvBYZBOgtTmNS2HRkdRD6ktuSj2G0F\nmQ3f596cilTdmqZkg6ipjSyGSSHaZUjM5FQWgPgHPJ93eyZk0XYD8mwN5Rdg90zC\nU1wzVqg7vHleWAkt5r88zdYyZdsuNv17bg4BvPCC17257+kWj3XC03zFWI0/Lzuf\nKdJ7cE12m8CYcwmEZi6/eQuz4rKk06i2qcdM5ynQ0YzngP8T0ngbzFlJJSTbJ//i\nyxNa+X30xWmtJ8uvBUksj4SChmj++bOHGuFIN2CBrhzB/R0MW2nPYr4CSLClHU6z\nLhMCczqK4yMFxZiRIIP4zAS1zVnuHBQsNkmwPJE4TzZQ6sdvqQe7BABeWMGd67gn\nstASpJ8q1Ib5mok5xr4RtYcPoSkmRbxzkaoxPV6GURkzUq7wWiuuSTZQQYu5WeIR\nTzSW7NmK0AY84q++2IsxuxkkQStJNttwFqpQh8ieao4ll2Snh+uFHjOi1pFuo3k2\nyEzTUVJ4na8c8Bq5WaOzY2bvtQhCyygzxsm+AEUlj+yQ5izHAkMTI+WvRpr8o66t\nlkTIHoLayVq+KDS2XVmFF+NydTqnO8qSA/V7dK7HcXCRWK1AXxC8RTbUdEJ3D6FI\nkbLDlRjdQlkRtSNpBNFSh0WfiKA2CyIgc0+RAVrEosxA0Dp+QF2sJxIRvCeyFH/f\nvnBtdrCv2PJy8IsekGZ0XC7RypMMJEu+cHO5wKJAi+68RCgj5UlaVfiaEt7c8173\nrJdrM5JptVikN8VhCudTDVKyLKG3h5BIbMdxWf7T7HZHWocdoCuj6RnAvj0687sY\nqzdktjhFyS5uwUM2Mz9bEbEElOv335iCIeXndxF8YUTZ3/OaWDi6jSKaqAjSQuro\nsddcJEfspeorD3/SYFGVC6FjwAXMcHcpdVXUUHIS1IDUO3KbdZvvJNT29zLao2Lz\nsSM=\n-----END ENCRYPTED PRIVATE KEY-----\n",
-      "passphrase": "53b6a6016fd3ffa9938297d21fef8d51"
-    }
-  },
-  "enterpriseID": "47757585"
-}
+const boxAppSettings=process.env.BOX_JWT;
 
 let serviceAccountClient;
-
-console.log("Using config file...");
-let configFile =boxAppSettings;
-let session = box.getPreconfiguredInstance(configFile);
+let session = box.getPreconfiguredInstance(JSON.parse(boxAppSettings));
 serviceAccountClient = session.getAppAuthClient('enterprise');
 
 /******************************************************************************
