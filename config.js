@@ -6,7 +6,7 @@ exports.creds = {
   // or equivalently: 'https://login.microsoftonline.com/<tenant_guid>/v2.0/.well-known/openid-configuration'
 
   // Required, the client ID of your app in AAD  
-  clientID: '62f0b087-8948-4704-bb07-fa8d97fd05bf',
+  clientID: process.env.B2C_CLIENT_ID,
 
   // Required, must be 'code', 'code id_token', 'id_token code' or 'id_token' 
   // If you want to get access_token, you must be 'code', 'code id_token' or 'id_token code'
@@ -16,15 +16,14 @@ exports.creds = {
   responseMode: 'form_post', 
 
   // Required, the reply URL registered in AAD for your app
-  //redirectUrl: 'http://localhost:3000/auth/openid/return', 
-  redirectUrl: 'https://box-azureb2c-sandpit.herokuapp.com/auth/openid/return', 
+  redirectUrl: process.env.B2C_REDIRECT_URL, 
 
   // Required if we use http for redirectUrl
   allowHttpForRedirectUrl: true,
   
   // Required if `responseType` is 'code', 'id_token code' or 'code id_token'. 
   // If app key contains '\', replace it with '\\'.
-  clientSecret: '|Tp031T97F`xO{->Shw6p#TE', 
+  clientSecret: process.env.B2C_CLIENT_SECRET, 
 //b8ygu|\GWn4-TPZ3-{q4_BF"
   // Required, must be true for B2C
   isB2C: true,
@@ -72,10 +71,10 @@ exports.creds = {
 // The url you need to go to destroy the session with AAD, 
 // replace <tenant_name> with your tenant name, and
 // replace <signin_policy_name> with your signin policy name.
-exports.destroySessionUrl = 
-  'https://login.microsoftonline.com/boxb2csandpit.onmicrosoft.com/oauth2/v2.0/logout' +
-  '?p=B2C_1_signin' +
-  '&post_logout_redirect_uri=https://box-azureb2c-sandpit.herokuapp.com';
+exports.destroySessionUrl = process.env.B2C_LOGOUT_URL;
+  //'https://login.microsoftonline.com/boxb2csandpit.onmicrosoft.com/oauth2/v2.0/logout' +
+  //'?p=B2C_1_signin' +
+  //'&post_logout_redirect_uri=https://box-azureb2c-sandpit.herokuapp.com';
 
 // If you want to use the mongoDB session store for session middleware; otherwise we will use the default
 // session store provided by express-session.
