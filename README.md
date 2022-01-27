@@ -22,20 +22,21 @@ You will need both a Azure free developer account and a Box account
 1. Go to Azure portal
 
 2. Create a new resource
+
     Choose 'Azure Active Directory B2C'
     
     Create a new Azure AD B2C Tenant
   
     Give it a meaningful name like 'box-b2c-demo' or similar
     
-    Create new resource group
+    Choose 'Create new resource group', again name it something like boxb2c
   
     After creation, go to 'Open B2C Tenant' (This opens in a new window)
     
 3. Register a new application
    Go to 'App Registrations'-> New Registration
-   Add a client secret
-   Add APIs and scopes
+   Add a client secret (and copy the value as you will need it in the next section)
+
    
 ## Box
 
