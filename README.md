@@ -74,7 +74,7 @@ You will need both a Azure free developer account and a Box account
 
   Get the client ID of your app from the app landing page
   
-  <img src="/images/clientId.png" width="50%" height="50%">
+  <img src="/images/clientId.jpg" width="50%" height="50%">
 
 2. Install dependencies
 
