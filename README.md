@@ -33,10 +33,66 @@ You will need both a Azure free developer account and a Box account
     After creation, go to 'Open B2C Tenant' (This opens in a new window)
     
 3. Register a new application
-   Go to 'App Registraions'-> New Registration
+   Go to 'App Registrations'-> New Registration
    Add a client secret
+   Add APIs and scopes
    
+## Box
 
+1. Create a new JWT Application https://developer.box.com/guides/authentication/jwt/jwt-setup/
+  - App access level: App access only
+  - Application scopes: Read, Write, Manage users, Manage groups
+  - Advanced features: Generate user access tokens
+  - CORS Domains: http://localhost:3000 
+
+2. Download the json file with the private key
+   This will be downloaded as json file with 12 lines. Remove all line ending to make it a single line
+  
+    From
+
+    <img src="/images/multi.png" width="50%" height="50%">
+
+    
+    To
+    
+    <img src="/images/single.png" width="50%" height="50%">
+
+## Setup and run the app
+
+1. Clone this repository and create an '.env' file in the root and add the following key/value pair
+  -  B2C_CLIENT_ID=..from the settings page of your B2C App
+  -  B2C_REDIRECT_URL=http://localhost:3000/auth/openid/return
+  -  B2C_CLIENT_SECRET=..API Secret created above
+  -  B2C_METADATA=https://login.microsoftonline.com/NAME_OF_YOUR_B2C_TENANT.onmicrosoft.com/v2.0/.well-known/openid-configuration
+  -  B2C_LOGOUT_URL
+  -  BOX_JWT=..jwt json config in a single line
+
+2. Install dependencies
+
+    npm install
+
+3. Run the app
+
+    npm start
+
+    This should bring up this website on localhost:3000 and you can go through the registration process
+  
+    Welcome screen
+    
+    <img src="/images/screen.png" width="100%" height="100%">
+    
+    Registration (sign up)
+    
+    <img src="/images/register.png" width="50%" height="50%">
+    
+    User mapping info
+    
+    <img src="/images/loggedin.png" width="100%" height="100%">    
+    
+    Folder created as the app user
+    
+    <img src="/images/folder.png" width="100%" height="100%">
+    
     
 # License
 The MIT License (MIT)
@@ -48,4 +104,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
