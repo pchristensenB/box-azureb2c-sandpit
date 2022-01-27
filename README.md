@@ -64,7 +64,7 @@ You will need both a Azure free developer account and a Box account
   -  B2C_REDIRECT_URL=http://localhost:3000/auth/openid/return
   -  B2C_CLIENT_SECRET=..API Secret created above
   -  B2C_METADATA=https://login.microsoftonline.com/NAME_OF_YOUR_B2C_TENANT.onmicrosoft.com/v2.0/.well-known/openid-configuration
-  -  B2C_LOGOUT_URL
+  -  B2C_LOGOUT_URL=
   -  BOX_JWT=..jwt json config in a single line
 
 2. Install dependencies
@@ -84,6 +84,8 @@ You will need both a Azure free developer account and a Box account
     Registration (sign up)
     
     <img src="/images/register.png" width="50%" height="50%">
+    
+    <img src="/images/regcode.png" width="50%" height="50%">
     
     User mapping info
     
