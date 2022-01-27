@@ -22,20 +22,21 @@ You will need both a Azure free developer account and a Box account
 1. Go to Azure portal
 
 2. Create a new resource
+
     Choose 'Azure Active Directory B2C'
     
     Create a new Azure AD B2C Tenant
   
     Give it a meaningful name like 'box-b2c-demo' or similar
     
-    Create new resource group
+    Choose 'Create new resource group', again name it something like boxb2c
   
     After creation, go to 'Open B2C Tenant' (This opens in a new window)
     
 3. Register a new application
    Go to 'App Registrations'-> New Registration
-   Add a client secret
-   Add APIs and scopes
+   Add a client secret (and copy the value as you will need it in the next section)
+
    
 ## Box
 
@@ -63,9 +64,14 @@ You will need both a Azure free developer account and a Box account
   -  B2C_CLIENT_ID=..from the settings page of your B2C App
   -  B2C_REDIRECT_URL=http://localhost:3000/auth/openid/return
   -  B2C_CLIENT_SECRET=..API Secret created above
-  -  B2C_METADATA=https://login.microsoftonline.com/NAME_OF_YOUR_B2C_TENANT.onmicrosoft.com/v2.0/.well-known/openid-configuration
+  -  B2C_METADATA=https://login.microsoftonline.com/DOMAIN_OF_YOUR_B2C_TENANT/v2.0/.well-known/openid-configuration
   -  B2C_LOGOUT_URL=
   -  BOX_JWT=..jwt json config in a single line
+
+  Get the domain of your tenant from the landing page
+  
+  <img src="/images/domain.png" width="75%" height="75%">
+
 
 2. Install dependencies
 
@@ -79,7 +85,7 @@ You will need both a Azure free developer account and a Box account
   
     Welcome screen
     
-    <img src="/images/screen.png" width="100%" height="100%">
+    <img src="/images/screen.png" width="75%" height="75%">
     
     Registration (sign up)
     
