@@ -60,7 +60,7 @@ You will need both a Azure free developer account and a Box account
 
 ## Setup and run the app
 
-1. Clone this repository and create an '.env' file in the root and add the following key/value pair
+1. Clone this repository and create an '.env' file in the root and add the following key/value pairs
   -  B2C_CLIENT_ID=..from the settings page of your B2C App
   -  B2C_REDIRECT_URL=http://localhost:3000/auth/openid/return
   -  B2C_CLIENT_SECRET=..API Secret created above
@@ -68,10 +68,13 @@ You will need both a Azure free developer account and a Box account
   -  B2C_LOGOUT_URL=
   -  BOX_JWT=..jwt json config in a single line
 
-  Get the domain of your tenant from the landing page
+  Get the domain of your tenant from the tenant landing page
   
-  <img src="/images/domain.png" width="75%" height="75%">
+  <img src="/images/domain.png" width="50%" height="50%">
 
+  Get the client ID of your app from the app landing page
+  
+  <img src="/images/clientId.png" width="50%" height="50%">
 
 2. Install dependencies
 
