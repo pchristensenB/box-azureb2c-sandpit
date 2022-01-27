@@ -30,7 +30,12 @@ You will need both a Azure free developer account and a Box account
     
     Create new resource group
   
-    After creation, go to 'Settings'
+    After creation, go to 'Open B2C Tenant' (This opens in a new window)
+    
+3. Register a new application
+   Go to 'App Registraions'-> New Registration
+   Add a client secret
+   
 
     
 # License
